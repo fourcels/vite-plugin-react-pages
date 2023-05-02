@@ -60,25 +60,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 /// <reference types="vite-plugin-react-pages/client" />
 ```
 
-## Configuration
-
-To use custom configuration, pass your options to Pages when instantiating the
-plugin:
-
-```js
-// vite.config.js
-import pages from "vite-plugin-react-pages";
-
-export default {
-  plugins: [
-    pages("src/views"),
-  ],
-};
-```
-
 ## Route Style
 
-- `layout` => wrap page
+- `layout` => layout page
 - `index` => index page
 - `404` => no match page
 - `_prefix` => group pages
