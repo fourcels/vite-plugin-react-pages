@@ -8,7 +8,7 @@
 ### Install
 
 ```bash
-npm install -D vite-plugin-react-pages
+npm install -D @fourcels/vite-plugin-react-pages
 npm install react-router react-router-dom
 ```
 
@@ -17,7 +17,7 @@ npm install react-router react-router-dom
 Add to your `vite.config.js`:
 
 ```js
-import pages from "vite-plugin-react-pages";
+import pages from "@fourcels/vite-plugin-react-pages";
 
 export default {
   plugins: [
@@ -57,7 +57,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 
 ```ts
 // vite-env.d.ts
-/// <reference types="vite-plugin-react-pages/client" />
+/// <reference types="@fourcels/vite-plugin-react-pages/client" />
 ```
 
 ## Route Style
