@@ -22,9 +22,13 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^18.16.3",
-    "glob": "^10.2.2",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "glob": "^10.2.2"
+  },
+  "peerDependencies": {
     "react-router": "^6.11.0",
-    "typescript": "^5.0.4",
     "vite": "^4.3.3"
   }
 }

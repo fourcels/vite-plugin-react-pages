@@ -2,3 +2,5 @@
 node_modules
 
 .github
+examples
+pnpm-workspace.yaml
