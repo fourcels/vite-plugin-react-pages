@@ -3,7 +3,7 @@ import { Outlet, isRouteErrorResponse, useRouteError } from 'react-router';
 export function Component() {
     return (
         <div>
-            <div>Index Layout</div>
+            <div>Home Layout</div>
             <Outlet />
         </div>
     )

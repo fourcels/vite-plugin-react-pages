@@ -1,7 +1,7 @@
 export function Component() {
     return (
         <div>
-            <div>404</div>
+            Home 404
         </div>
     )
 }

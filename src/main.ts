@@ -1,11 +1,11 @@
 import type { Plugin } from 'vite';
-import { getPages } from './utils.js';
+import { Route } from './route.js';
 
-function pagesPlugin(): Plugin {
+function pagesPlugin(baseDir: string = "src/pages"): Plugin {
 
     const virtualModuleId = '~pages'
     const resolvedVirtualModuleId = '\0' + virtualModuleId
-
+    baseDir = baseDir.replace(/^\/+|\/+$/g, "")
     return {
         name: 'vite-plugin-react-pages', // required, will show up in warnings and errors
         resolveId(id) {
@@ -15,8 +15,8 @@ function pagesPlugin(): Plugin {
         },
         load(id) {
             if (id === resolvedVirtualModuleId) {
-                const pages = getPages()
-                return `export default ${pages}`
+                const route = new Route(baseDir)
+                return `export default [${route}]`
             }
         },
     }
