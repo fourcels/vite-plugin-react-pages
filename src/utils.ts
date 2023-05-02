@@ -2,35 +2,20 @@ import { globSync } from 'glob'
 import { defaultConfig } from './config.js'
 
 
+type Route = {
+    path: string;
+    index: boolean;
+    componentPath?: string;
+    children?: Route[];
+}
+
 export function getPages() {
-    const pages: string[] = []
-    const baseDir = defaultConfig.dir
-    const routes = getRoutes(baseDir)
-    const layoutPath = globSync(`${baseDir}/_layout*`)
-    if (layoutPath.length > 0) {
-        pages.push(`{
-            path: "/",
-            lazy: () => import("/${layoutPath[0]}"),
-            children: ${routes},
-        }`)
-    } else {
-        pages.push(`{
-            path: "/",
-            children: ${routes},
-        }`)
-    }
-    const noMatch = globSync(`${baseDir}/404*`)
-    if (noMatch.length > 0) {
-        pages.push(`{
-            path: "*",
-            lazy: () => import("/${noMatch[0]}"),
-        }`)
-    }
-    return `[${pages.join(",")}]`
+    const route = getRoute(defaultConfig.dir, true, defaultConfig.dir)
+    return `[${route}]`
 }
 export function getRoutes(baseDir: string) {
     const pages: string[] = []
-    const paths = globSync(`${baseDir}/[a-z[]*`, { withFileTypes: true })
+    const paths = globSync(`${baseDir}/[a-zA-Z0-9[]*`, { withFileTypes: true })
     for (const path of paths) {
         pages.push(getRoute(path.relative(), path.isDirectory(), baseDir))
     }
@@ -38,37 +23,51 @@ export function getRoutes(baseDir: string) {
     return `[${pages.join(',')}]`
 }
 
-export function getRoute(path: string, isDirectory: boolean, baseDir: string) {
-    let pagePath = trimStart(path, baseDir + "/")
-    pagePath = pagePath
+export function getRoute(filePath: string, isDirectory: boolean, baseDir: string) {
+    let path = trimStart(filePath, baseDir)
+    path = trimStart(path, "/")
+    path = path
         .replace(/\..*$/, "")
         .replace(/\[\.{3}.+\]/, '*')
         .replace(/\[(.+)\]/, ':$1')
     if (isDirectory) {
-        const layoutPath = globSync(`${path}/_layout*`)
+        const layoutPath = globSync(`${filePath}/_layout*`)
         if (layoutPath.length > 0) {
             return `{
-                path: "${pagePath}",
+                path: "${path}",
                 lazy: () => import("/${layoutPath[0]}"),
-                children: ${getRoutes(path)},
+                children: ${getRoutes(filePath)},
             }`
         } else {
             return `{
-                path: "${pagePath}",
-                children: ${getRoutes(path)},
+                path: "${path}",
+                children: ${getRoutes(filePath)},
             }`
         }
-    } else if (/index$/.test(pagePath)) {
+    } else if (isIndex(path)) {
         return `{
             index: true,
-            lazy: () => import("/${path}"),
+            lazy: () => import("/${filePath}"),
+        }`
+    } else if (is404(path)) {
+        return `{
+            path: "*",
+            lazy: () => import("/${filePath}"),
         }`
     } else {
         return `{
-            path: "${pagePath}",
-            lazy: () => import("/${path}"),
+            path: "${path}",
+            lazy: () => import("/${filePath}"),
         }`
     }
+}
+
+function is404(path: string) {
+    return /404$/.test(path)
+}
+
+function isIndex(path: string) {
+    return /index$/.test(path)
 }
 
 
