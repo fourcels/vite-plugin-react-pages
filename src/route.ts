@@ -39,7 +39,7 @@ export class Route {
         const routes: Route[] = []
         const paths = globSync(`${baseDir}/*`, { withFileTypes: true })
         for (const path of paths) {
-            routes.push(new Route(baseDir, path.relative(), path.isDirectory()))
+            routes.push(new Route(baseDir, path.relativePosix(), path.isDirectory()))
         }
         return routes
     }
