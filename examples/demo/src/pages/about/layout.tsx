@@ -1,13 +1,5 @@
 import { Outlet, isRouteErrorResponse, useRouteError } from 'react-router';
 
-export function Component() {
-    return (
-        <div>
-            <div>Home Layout</div>
-            <Outlet />
-        </div>
-    )
-}
 
 export function ErrorBoundary() {
     const error = useRouteError() as Error;

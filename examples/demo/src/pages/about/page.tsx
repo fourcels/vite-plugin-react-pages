@@ -1,5 +1,5 @@
 export function Component() {
     return (
-        <div>user</div>
+        <div>About Page</div>
     )
 }

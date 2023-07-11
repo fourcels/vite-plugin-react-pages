@@ -1,6 +1,5 @@
-
 export function Component() {
     return (
-        <div>index</div>
+        <div>Home Page</div>
     )
 }
