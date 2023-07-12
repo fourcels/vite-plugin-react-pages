@@ -1,22 +1,22 @@
 # vite-plugin-react-pages
 
-> File system based routing for React applications using
-> [Vite](https://github.com/vitejs/vite)
+> File system routing for React applications base
+> [react-router](https://github.com/remix-run/react-router),
+> [vite](https://github.com/vitejs/vite)
 
 ## Getting Started
 
 ### Install
 
 ```bash
-npm install -D @fourcels/vite-plugin-react-pages
-npm install react-router react-router-dom
+npm install @fourcels/vite-plugin-react-pages react-router react-router-dom
 ```
 
 ### Vite config
 
 Add to your `vite.config.js`:
 
-```js
+```ts
 import pages from "@fourcels/vite-plugin-react-pages";
 
 export default {
@@ -36,21 +36,18 @@ exported from a `.tsx`, `.jsx`, `.ts`, `.js` file in the `src/pages` directory.
 You can access the generated routes by importing the `~pages` module in your
 application.
 
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import {
-  RouterProvider,
-  createBrowserRouter,
-} from "react-router-dom";
+```tsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import routes from '~pages'
+import routes from "~pages";
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <RouterProvider router={createBrowserRouter(routes)} />
   </React.StrictMode>,
-)
+);
 ```
 
 **Type**
@@ -62,10 +59,20 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 
 ## Route Style
 
-- `layout` => layout page
-- `index` => index page
-- `404` => no match page
-- `_prefix` => group pages
+- `layout.{tsx,jsx,ts,js}` => layout page
+- `page.{tsx,jsx,ts,js}` => index page
+- `404.{tsx,jsx,ts,js}` => not found page
+- `_prefix` => skip folder
+- `(layout)` =>
+  [Layout Routes](https://reactrouter.com/en/main/route/route#layout-routes)
+- `[id]` => `:id`
+  [Dynamic Segments](https://reactrouter.com/en/main/route/route#dynamic-segments)
+- `[[id]]` => `:id?`
+  [Optional Segments](https://reactrouter.com/en/main/route/route#optional-segments)
+- `[...slug]` => `*`
+  [Splats](https://reactrouter.com/en/main/route/route#splats)
+- `{task}` => `task?`
+  [Optional Static Segments](https://reactrouter.com/en/main/route/route#dynamic-segments)
 
 **Example:**
 
@@ -74,13 +81,31 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 ```bash
 # folder structure
 src/pages/
-├── 404.tsx
-├── about.tsx
-├── dashboard
-│   ├── _account
-│   │   └── user.tsx
-│   ├── index.tsx
+├── about
+│   ├── [[lang]]
+│   │   └── page.tsx
 │   └── layout.tsx
-├── index.tsx
-└── layout.tsx
+├── dashboard
+│   ├── (account)
+│   │   ├── admin
+│   │   │   └── page.tsx
+│   │   ├── user
+│   │   │   └── page.tsx
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── [...slug]
+│   │   └── page.tsx
+│   ├── _account
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── teams
+│   │   └── [id]
+│   │       └── page.tsx
+│   ├── {book}
+│   │   └── comment
+│   │       └── page.tsx
+│   └── layout.tsx
+├── 404.tsx
+├── layout.tsx
+└── page.tsx
 ```

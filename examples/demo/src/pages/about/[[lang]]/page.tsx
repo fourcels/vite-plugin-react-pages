@@ -1,5 +1,5 @@
 export function Component() {
     return (
-        <div>About Page</div>
+        <div>lang Page</div>
     )
 }
