@@ -9,7 +9,7 @@
 ### Install
 
 ```bash
-npm install @fourcels/vite-plugin-react-pages react-router react-router-dom
+pnpm add @fourcels/vite-plugin-react-pages react-router react-router-dom
 ```
 
 ### Vite config
@@ -62,7 +62,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 - `layout.{tsx,jsx,ts,js}` => layout page
 - `page.{tsx,jsx,ts,js}` => index page
 - `404.{tsx,jsx,ts,js}` => not found page
-- `_prefix` => skip folder
+- `_lib` => private folder (underscore prefix)
 - `(layout)` =>
   [Layout Routes](https://reactrouter.com/en/main/route/route#layout-routes)
 - `[id]` => `:id`
@@ -76,35 +76,23 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 
 **Example:**
 
-[exmaple](/examples/demo/)
+[exmaple](/src/pages)
 
 ```bash
 # folder structure
 src/pages/
-├── about
-│   ├── [[lang]]
-│   │   └── page.tsx
-│   └── layout.tsx
-├── dashboard
-│   ├── (account)
-│   │   ├── admin
-│   │   │   └── page.tsx
-│   │   ├── user
-│   │   │   └── page.tsx
-│   │   ├── layout.tsx
-│   │   └── page.tsx
+├── (dashboard)
 │   ├── [...slug]
 │   │   └── page.tsx
-│   ├── _account
-│   │   ├── layout.tsx
+│   ├── posts
+│   │   ├── [id]
+│   │   │   └── page.tsx
 │   │   └── page.tsx
-│   ├── teams
-│   │   └── [id]
-│   │       └── page.tsx
-│   ├── {book}
-│   │   └── comment
-│   │       └── page.tsx
-│   └── layout.tsx
+│   ├── layout.tsx
+│   └── page.tsx
+├── about
+│   └── [[lang]]
+│       └── page.tsx
 ├── 404.tsx
 ├── layout.tsx
 └── page.tsx
