@@ -1,5 +1,5 @@
 import type { Plugin } from 'vite';
-import { Route } from './route.js';
+import { Route } from './route';
 
 function pagesPlugin(baseDir: string = "src/pages"): Plugin {
 
