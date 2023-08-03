@@ -1,7 +1,7 @@
 {
   "name": "@fourcels/vite-plugin-react-pages",
   "type": "module",
-  "version": "0.4.14",
+  "version": "0.4.15",
   "description": "File system base react-router plugin for Vite",
   "scripts": {
     "dev": "vite",
