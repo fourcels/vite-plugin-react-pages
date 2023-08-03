@@ -1,10 +1,7 @@
 name: Publish Package to npmjs
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - v*
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -14,22 +11,8 @@ jobs:
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v3
         with:
-          node-version: "18.x"
-          registry-url: "https://registry.npmjs.org"
-      - run: corepack enable
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          node-version: 18
+          cache: pnpm
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
