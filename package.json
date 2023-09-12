@@ -1,11 +1,11 @@
 {
   "name": "@fourcels/vite-plugin-react-pages",
   "type": "module",
-  "version": "0.4.16",
+  "version": "0.4.17",
   "description": "File system base react-router plugin for Vite",
   "scripts": {
     "dev": "vite",
-    "build": "tsup",
+    "build": "tsup-node",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
