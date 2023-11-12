@@ -1,6 +1,44 @@
 import fs from 'node:fs';
 import path from 'node:path/posix';
 
+export class RouteData {
+    path?: string;
+    lazy?: string;
+    index?: boolean;
+    children?: RouteData[]
+
+    constructor(options: {
+        path?: string;
+        lazy?: string;
+        index?: boolean;
+        children?: RouteData[]
+    }) {
+        const { path, lazy, index, children } = options
+        this.path = path
+        this.lazy = lazy
+        this.index = index
+        this.children = children
+    }
+
+    toString() {
+        const res: string[] = []
+        res.push("{")
+        if (this.path) {
+            res.push(`path: "${this.path}",`)
+        }
+        if (this.lazy) {
+            res.push(`lazy: () => import("${this.lazy}"),`)
+        }
+        if (this.index) {
+            res.push(`index: ${this.index},`)
+        }
+        if (this.children) {
+            res.push(`children: [${this.children}],`)
+        }
+        res.push("}")
+        return res.join("\n")
+    }
+}
 
 export class Route {
     path: string;
@@ -9,9 +47,6 @@ export class Route {
     notFound?: string;
     children: Route[] = [];
 
-    get isSplat(): boolean {
-        return this.path === '*'
-    }
     get isPathless(): boolean {
         return /^\(.+\)$/.test(this.path)
     }
@@ -41,60 +76,33 @@ export class Route {
         }
     }
 
-    toString(): string {
-        if (this.isSplat) {
-            if (this.page) {
-                return `{
-                    path: "${this.path}",
-                    lazy: () => import("${this.page}")
-                }`
-            } else {
-                return `{
-                    path: "${this.path}",
-                }`
-            }
+    getRouteData(): RouteData {
+        if (this.path === '*') {
+            const data = new RouteData({
+                path: this.path,
+                lazy: this.page
+            })
+            return data
         }
 
-        const children = this.children.map(item => item.toString())
+        const children = this.children.map(item => item.getRouteData())
         if (this.page) {
-            const page = `{
-                    lazy: () => import("${this.page}"),
-                    index: true
-                }`
-            children.push(page)
+            children.push(new RouteData({
+                index: true,
+                lazy: this.page,
+            }))
         }
         if (this.notFound) {
-            const notFound = `{
-                    lazy: () => import("${this.notFound}"),
-                    path: "*"
-                }`
-            children.push(notFound)
+            children.push(new RouteData({
+                path: "*",
+                lazy: this.notFound,
+            }))
         }
-        if (this.isPathless) {
-            if (this.layout) {
-                return `{
-                    lazy: () => import("${this.layout}"),
-                    children: [${children}]
-                }`
-            } else {
-                return `{
-                    children: [${children}]
-                }`
-            }
-        } else {
-            if (this.layout) {
-                return `{
-                    path: "${this.path}",
-                    lazy: () => import("${this.layout}"),
-                    children: [${children}]
-                }`
-            } else {
-                return `{
-                    path: "${this.path}",
-                    children: [${children}]
-                }`
-            }
-        }
-
+        const data = new RouteData({
+            path: this.isPathless ? "" : this.path,
+            lazy: this.layout,
+            children,
+        })
+        return data
     }
 }
