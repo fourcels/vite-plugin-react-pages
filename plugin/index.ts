@@ -22,7 +22,7 @@ function pagesPlugin(baseDir: string = "src/pages"): Plugin {
             }
         },
         configureServer({ watcher, moduleGraph }) {
-            const reloadVirtualModule = moduleId => {
+            const reloadVirtualModule = (moduleId: string) => {
                 const module = moduleGraph.getModuleById(moduleId);
                 if (module) {
                     moduleGraph.invalidateModule(module);
